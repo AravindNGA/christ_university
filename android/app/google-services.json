@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "95160082412",
+    "project_id": "christ-university-2028506arvnd",
+    "storage_bucket": "christ-university-2028506arvnd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:95160082412:android:cccc73687778ebf3d02ac9",
+        "android_client_info": {
+          "package_name": "com.aravind.christ_university"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "95160082412-mgdo35lnkqtklrif4t442idfqfpkiqkp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlxT4nOyVLPWiL8jh5MM2z7cCiqTudn6Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "95160082412-mgdo35lnkqtklrif4t442idfqfpkiqkp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
