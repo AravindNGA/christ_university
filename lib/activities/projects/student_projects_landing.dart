@@ -30,13 +30,18 @@ bool registered = false;
 final db = FirebaseFirestore.instance;
 var actualMentorName;
 
-var projectTitleLIst = ["OST","OBT","Master Thesis","Live Project","SIP or WIP","SCP"];
+var projectTitleLIst = [
+  "OST",
+  "OBT",
+  "Master Thesis",
+  "Live Project",
+  "SIP or WIP",
+  "SCP"
+];
 
 class _ProjectsModuleStudentState extends State<ProjectsModuleStudent> {
-
   @override
   Widget build(BuildContext context) {
-
     Firebase.initializeApp();
 
     int _count = projectTitleLIst.indexOf(widget.AcademicProjectsTitle);
@@ -75,8 +80,13 @@ class _ProjectsModuleStudentState extends State<ProjectsModuleStudent> {
             key: ValueKey<int>(_count),
             child: Column(
               children: [
-                ReUsableWidgets().textOutput("${highTitle}",
-                    Alignment.centerLeft, TextAlign.left, 20, true, Colors.black),
+                ReUsableWidgets().textOutput(
+                    "${highTitle}",
+                    Alignment.centerLeft,
+                    TextAlign.left,
+                    20,
+                    true,
+                    Colors.black),
                 StreamBuilder<QuerySnapshot>(
                     stream: db
                         .collection(widget.AcademicProjectsTitle)
@@ -86,16 +96,23 @@ class _ProjectsModuleStudentState extends State<ProjectsModuleStudent> {
                       if (snapshot.hasError || !(snapshot.hasData)) {
                         return gettingFirebaseListData();
                       } else {
-                        var name =
-                            snapshot.data!.docs.map((DocumentSnapshot document) {
-                          return document['${widget.AcademicProjectsTitle}MentorName'];
+                        var name = snapshot.data!.docs
+                            .map((DocumentSnapshot document) {
+                          return document[
+                              '${widget.AcademicProjectsTitle}MentorName'];
                         }).toList();
                         if (name.isEmpty) {
                           return gettingFirebaseListData();
                         } else {
                           print("is present");
                           highTitle = "Mentor Name";
-                          return ReUsableWidgets().textOutput("${name[0]}", Alignment.centerLeft, TextAlign.left, 25, true, Colors.black);
+                          return ReUsableWidgets().textOutput(
+                              "${name[0]}",
+                              Alignment.centerLeft,
+                              TextAlign.left,
+                              25,
+                              true,
+                              Colors.black);
                         }
                       }
                     }),
@@ -124,72 +141,70 @@ class _ProjectsModuleStudentState extends State<ProjectsModuleStudent> {
   }
 
   Widget gettingFirebaseListData() {
-
     var mentorNamesList;
 
-        return StreamBuilder<QuerySnapshot>(
-          stream: db.collection(ImportantVariables.facultyDatabase).snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Center(child: CircularProgressIndicator());
-            } else {
-              List<DropdownMenuItem> mentors = [];
-              for (int i = 0; i < snapshot.data!.docs.length; i++) {
-                DocumentSnapshot snap = snapshot.data!.docs[i];
+    return StreamBuilder<QuerySnapshot>(
+      stream: db.collection(ImportantVariables.facultyDatabase).snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          List<DropdownMenuItem> mentors = [];
+          for (int i = 0; i < snapshot.data!.docs.length; i++) {
+            DocumentSnapshot snap = snapshot.data!.docs[i];
 
-                mentors.add(
-                  DropdownMenuItem(
-                    child: Text(
-                        "${snap["salutation"]} ${snap["firstName"]} ${snap["lastName"]}"),
-                    value:
-                        "${snap["salutation"]} ${snap["firstName"]} ${snap["lastName"]}0${snap["userEmail"]}",
+            mentors.add(
+              DropdownMenuItem(
+                child: Text(
+                    "${snap["salutation"]} ${snap["firstName"]} ${snap["lastName"]}"),
+                value:
+                    "${snap["salutation"]} ${snap["firstName"]} ${snap["lastName"]}0${snap["userEmail"]}",
+              ),
+            );
+          }
+          return Column(
+            children: [
+              SizedBox(
+                height: 10,
+              ),
+              DropdownButtonHideUnderline(
+                child: Container(
+                  height: 70,
+                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Colors.white,
+                      border: Border.all()),
+                  child: DropdownButton<dynamic>(
+                    isDense: true,
+                    isExpanded: true,
+                    items: mentors,
+                    onChanged: (value) {
+                      print(value);
+                      mentorNamesList = value;
+                    },
+                    value: mentorNamesList,
+                    hint: Text("Select Mentor"),
                   ),
-                );
-              }
-              return Column(
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  DropdownButtonHideUnderline(
-                    child: Container(
-                      height: 70,
-                      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: Colors.white,
-                          border: Border.all()),
-                      child: DropdownButton<dynamic>(
-                        isDense: true,
-                        isExpanded: true,
-                        items: mentors,
-                        onChanged: (value) {
-                          print(value);
-                          mentorNamesList = value;
-                        },
-                        value: mentorNamesList,
-                        hint: Text("Select Mentor"),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ElevatedButton(
-                    onPressed: () => updateMentorData(mentorNamesList),
-                    child: Padding(
-                        padding: EdgeInsets.fromLTRB(60, 10, 60, 10),
-                        child: Text("Confirm")),
-                  )
-                ],
-              );
-            }
-          },
-        );
-      }
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () => updateMentorData(mentorNamesList),
+                child: Padding(
+                    padding: EdgeInsets.fromLTRB(60, 10, 60, 10),
+                    child: Text("Confirm")),
+              )
+            ],
+          );
+        }
+      },
+    );
+  }
 
   updateMentorData(String mentorName) {
-
     var mentorItems = mentorName.split("0");
     /*print(mentorItems[0]);
     print(mentorItems[1]);*/
@@ -215,11 +230,9 @@ class _ProjectsModuleStudentState extends State<ProjectsModuleStudent> {
           "${widget.AcademicProjectsTitle}MentorName", mentorItems[1]);
     });
 
-
     studentDocuments.set(studentDocRef).whenComplete(() => {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text("Submitted here Successfully"))),
         });
   }
-
 }

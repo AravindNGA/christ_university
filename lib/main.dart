@@ -29,6 +29,7 @@ import 'activities/studentmodules/studentsregistration/personal_details.dart';
 import 'activities/studentmodules/studentsregistration/work_exprience_details.dart';
 import 'login/faculty_or_student.dart';
 import 'login/student_login.dart';
+import 'login/trying_login.dart';
 
 Future<void> main() async {
 
@@ -40,12 +41,17 @@ Future<void> main() async {
 
   await preferencesShared.init();
   bool loginState = false, didStudentLogin = false, fresherLogin;
+  String whereAmI;
 
   loginState = await preferencesShared.getSavedBooleanState(ImportantVariables.loggedInStateSharPref) ?? false;
   didStudentLogin = await preferencesShared.getSavedBooleanState(ImportantVariables.didStudentLoginSharPref) ?? false;
 
   fresherLogin = await preferencesShared
       .getSavedBooleanState(ImportantVariables.tempStudentDetailsLogInStatus) ?? false;
+
+  whereAmI = await preferencesShared
+      .getSavedString(ImportantVariables.whereAmI) ?? MyRoutes.splash;
+
 
   runApp(MaterialApp(
 
@@ -57,15 +63,17 @@ Future<void> main() async {
       secondaryHeaderColor: Colors.teal,
     ),
 
-    initialRoute: loginState ? (fresherLogin ? MyRoutes.FresherLanding
+    /*initialRoute: loginState ? (fresherLogin ? MyRoutes.FresherLanding
         : (didStudentLogin ? MyRoutes.studentLanding : MyRoutes.facultyLanding))
-        : MyRoutes.splash,
+        : MyRoutes.splash,*/
+
+    initialRoute: whereAmI,
 
     //initialRoute: "/testing",
 
     routes: {
 
-      MyRoutes.testing : (context) => Testing_UI(),
+      MyRoutes.testing : (context) => TryingLogin(),
 
       MyRoutes.splash : (context) => SplashActivity(),
       MyRoutes.facultyOrStudent : (context) => FacultyOrStudent(),
@@ -76,7 +84,7 @@ Future<void> main() async {
 
       /*Students*/
       MyRoutes.studentsSignUpRoute : (context) => StudentSignUpActivity(),
-      MyRoutes.studentLanding : (context) => StudentLanding(),
+      MyRoutes.studentLanding : (context) => StudentLandingActivity(),
       MyRoutes.studentDataCollection : (context) => StudentDataCollection(),
       MyRoutes.studentAcademicData : (context) => StudentAcademicDetails(),
       MyRoutes.studentPersonalData : (context) => StudentPersonalDetails(),

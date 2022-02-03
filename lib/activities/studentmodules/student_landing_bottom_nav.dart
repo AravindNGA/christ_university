@@ -4,11 +4,11 @@ import 'package:christ_university/activities/studentmodules/student_home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-class StudentLanding extends StatefulWidget {
-  const StudentLanding({Key? key}) : super(key: key);
+class StudentLandingActivity extends StatefulWidget {
+  const StudentLandingActivity({Key? key}) : super(key: key);
 
   @override
-  _StudentLandingState createState() => _StudentLandingState();
+  _StudentLandingActivityState createState() => _StudentLandingActivityState();
 }
 
 var indexing = 0;
@@ -19,7 +19,7 @@ final screens = [
   StudentDataCollection(),
 ];
 
-class _StudentLandingState extends State<StudentLanding> {
+class _StudentLandingActivityState extends State<StudentLandingActivity> {
 
   @override
   void initState() {

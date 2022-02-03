@@ -76,7 +76,7 @@ class ReUsableWidgets {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  StudentList(projectType: title)));
+                                  StudentList(AcademicProjectsTitle: title)));
                     },
                   )),
             ],

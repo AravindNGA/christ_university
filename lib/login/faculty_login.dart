@@ -50,7 +50,7 @@ class _FacultyLoginState extends State<FacultyLogin> {
                   Colors.black),
               SizedBox(height: 2 * sizedBoxHeight),
               ElevatedButton(
-                onPressed: () => _signInWithGoogle(),
+                onPressed: () => _signInWithGoogleTrying(),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: ReUsableWidgets().textOutput(
@@ -172,6 +172,30 @@ class _FacultyLoginState extends State<FacultyLogin> {
           ));
         });
       }
+    }
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+  Future<UserCredential> _signInWithGoogleTrying() async {
+    bool userLoggedInBefore = false;
+    // Trigger the authentication flow
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+    await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    if (firebaseAuth.currentUser != null) {
+      userEmail = firebaseAuth.currentUser!.email!;
+
+      Navigator.pushNamed(context, MyRoutes.testing);
     }
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);

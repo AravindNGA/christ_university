@@ -269,7 +269,7 @@ class _FacultySignUpActivityState extends State<FacultySignUpActivity> {
                                   defaultSal = value!;
                                   if (value != "Choose") {
                                     passGender = true;
-                                    gender = defaultSal;
+                                    Sal = defaultSal;
                                   }
                                 });
                               },

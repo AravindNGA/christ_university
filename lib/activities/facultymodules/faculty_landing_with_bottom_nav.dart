@@ -1,6 +1,9 @@
 import 'package:christ_university/activities/facultymodules/courses/csv_to_list.dart';
 import 'package:christ_university/activities/facultymodules/faculty_activity_home.dart';
 import 'package:christ_university/activities/facultymodules/faculty_data_collection_home.dart';
+import 'package:christ_university/utils/important_variables.dart';
+import 'package:christ_university/utils/routes.dart';
+import 'package:christ_university/utils/shared_prefs.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -27,12 +30,15 @@ class _FacultyLandingActivityState extends State<FacultyLandingActivity> {
     super.initState();
 
     Firebase.initializeApp();
+
+    preferencesShared.setSaveAString(ImportantVariables.whereAmI, MyRoutes.facultyLanding);
   }
 
   @override
   Widget build(BuildContext context) {
 
     Firebase.initializeApp();
+    preferencesShared.setSaveAString(ImportantVariables.whereAmI, MyRoutes.facultyLanding);
 
     return Scaffold(
       body: SafeArea(

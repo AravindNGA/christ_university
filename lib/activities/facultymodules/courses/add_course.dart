@@ -24,7 +24,7 @@ final _fromKey1 = GlobalKey<FormState>();
 
 class _AddNewCourseState extends State<AddNewCourse> {
 
-  onClear(){
+  saveButton(){
     if(_fromKey1.currentState!.validate()){
       print(widget.title);
 
@@ -47,7 +47,7 @@ class _AddNewCourseState extends State<AddNewCourse> {
         actions: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0,0,8,0),
-            child: TextButton(onPressed: () => onClear(), child: ReUsableWidgets().textOutput("Save", Alignment.centerLeft, TextAlign.left, 16, false, Colors.white),),
+            child: TextButton(onPressed: () => saveButton(), child: ReUsableWidgets().textOutput("Save", Alignment.centerLeft, TextAlign.left, 16, false, Colors.white),),
           ),
         ],
       ),

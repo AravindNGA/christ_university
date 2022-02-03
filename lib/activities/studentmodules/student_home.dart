@@ -51,7 +51,7 @@ class _StudentHomeState extends State<StudentHome> {
       setState(() {});
     });
 
-
+    preferencesShared.setSaveAString(ImportantVariables.whereAmI, MyRoutes.studentLanding);
   }
 
   /*gettingUserName(String userEmail){
@@ -248,6 +248,8 @@ class _StudentHomeState extends State<StudentHome> {
   Widget build(BuildContext context) {
 
     Firebase.initializeApp();
+
+    preferencesShared.setSaveAString(ImportantVariables.whereAmI, MyRoutes.studentLanding);
 
     User? user = FirebaseAuth.instance.currentUser;
     userEmail = user!.email;

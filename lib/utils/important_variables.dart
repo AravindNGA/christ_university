@@ -3,6 +3,8 @@ import 'package:christ_university/utils/shared_prefs.dart';
 
 class ImportantVariables{
 
+  static String whereAmI = "whereAmI";
+
   /*Firebase db Collections and documents*/
   static String studentsDatabase = "studentsDatabase";
   static String facultyDatabase = "facultyDatabase";
