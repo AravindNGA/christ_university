@@ -2,7 +2,6 @@ import 'package:christ_university/utils/important_variables.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:christ_university/utils/shared_prefs.dart';
 
 class FacultyPersonalDetails extends StatefulWidget {
 
@@ -38,16 +37,12 @@ var bloodGroupDropDown = [
 
 var userName, userEmail;
 
-CollectionReference studentCollection = FirebaseFirestore.instance
-    .collection(ImportantVariables.studentsDatabase);
 
 var bloodGroup, phoneNumber, AlternativePhoneNumber,
     perAddressLine1, perAddressLine2, perCity, perState, perCountry, perPinCode, nationality,
-    tempAddressLine1, tempAddressLine2, tempCity, tempState, tempCountry, tempPinCode;
-var fatherName, fatherEmail, fatherPhone, motherName, motherEmail, motherPhone;
+    tempAddressLine1, tempAddressLine2, tempCity, tempState, tempCountry, tempPinCode, fatherName, fatherEmail, fatherPhone, motherName, motherEmail, motherPhone;
 
 var personalDataFilled = false;
-
 
 /*STFUL Class*/
 class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
@@ -85,8 +80,9 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
         "personalDataFilled" : personalDataFilled
       };
 
-      DocumentReference studentDocuments = studentCollection.doc(userEmail);
-      studentDocuments.update(updateUserData).whenComplete(() {
+      DocumentReference facultyDocs = FirebaseFirestore.instance
+          .collection(ImportantVariables.facultyDatabase).doc(userEmail);
+      facultyDocs.update(updateUserData).whenComplete(() {
         print('Submitted');
       });
     }
@@ -158,6 +154,7 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
                 ),
                 SizedBox(height: sizedBoxHeight/2,),
                 TextFormField(
+                  initialValue: "",
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -177,7 +174,6 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
                 ),
                 SizedBox(height: sizedBoxHeight/2,),
                 TextFormField(
-                  initialValue: "Value",
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: "Enter Nationality",
@@ -537,10 +533,7 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-        /*userSal = documentSnapshot["salutation"];
-        userFirstNameFromDB = documentSnapshot["firstName"];
-        userSecondName = documentSnapshot["lastName"];
-        userSpecialization = documentSnapshot["spec"];*/
+
         setState(() {
 
         });

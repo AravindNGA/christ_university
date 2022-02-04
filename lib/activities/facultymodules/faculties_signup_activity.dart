@@ -172,7 +172,7 @@ class _FacultySignUpActivityState extends State<FacultySignUpActivity> {
       DocumentReference studentDocuments = studentCollection.doc(userEmail);
       studentDocuments.set(studentDocRef).whenComplete(
           () => {
-            Navigator.of(context).popUntil(ModalRoute.withName(MyRoutes.facultyLanding))});
+            Navigator.popAndPushNamed(context, MyRoutes.facultyLanding)});
     }
   }
 
