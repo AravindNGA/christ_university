@@ -19,7 +19,7 @@ class _Testing_UIState extends State<Testing_UI> {
     print(deviceWidth);
     print(deviceHeight);
 
-    Widget titleCardsTest() {
+    /*Widget titleCardsTest() {
       return Column(
         children: [
           Container(
@@ -50,7 +50,7 @@ class _Testing_UIState extends State<Testing_UI> {
                   )))
         ],
       );
-    }
+    }*/
 
     return Scaffold(
       body: SafeArea(
@@ -95,5 +95,6 @@ class _Testing_UIState extends State<Testing_UI> {
         )
       ),
     );
+
   }
 }

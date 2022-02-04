@@ -27,6 +27,7 @@ var message = TextEditingController();
 class _DiscussionWithMentorState extends State<DiscussionWithMentor> {
 
 
+
   Widget gettingFirebaseData() => StreamBuilder<QuerySnapshot>(
         stream: db.collection(ImportantVariables.studentsChatScreen)
         .where("${widget.projectType}MenteeName", isEqualTo: widget.studentName)
@@ -39,40 +40,44 @@ class _DiscussionWithMentorState extends State<DiscussionWithMentor> {
               padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
               child: ListView(
                 children: snapshot.data!.docs.map((documents) {
-                  return Container(
-                    child: Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: documents["sentByStudent"]
-                              ? BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(1))
-                              : BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(1),
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(20)),
-                        ),
-                        color: Colors.white,
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(16, 16, 16, 10),
-                          child: Column(
-                            children: [
-                              ReUsableWidgets().textOutput(
-                                  documents["content"],
-                                  Alignment.centerLeft,
-                                  TextAlign.left,
-                                  18,
-                                  false,
-                                  Colors.black),
-                              SizedBox(
-                                height: sizedBoxHeight / 5,
-                              ),
-                            ],
+                  return Align(
+                    alignment: documents["sentByStudent"] ? Alignment.centerLeft : Alignment.centerRight,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width*0.75,
+                      child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: documents["sentByStudent"]
+                                ? BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20),
+                                    bottomLeft: Radius.circular(1),
+                                    bottomRight: Radius.circular(20))
+                                : BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(1),
+                                    bottomLeft: Radius.circular(20),
+                                    bottomRight: Radius.circular(20)),
                           ),
-                        )),
+                          color: documents["sentByStudent"] ? Colors.white : Colors.teal,
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(16, 16, 16, 10),
+                            child: Column(
+                              children: [
+                                ReUsableWidgets().textOutput(
+                                    documents["content"],
+                                    Alignment.centerLeft,
+                                    TextAlign.left,
+                                    18,
+                                    false,
+                                    documents["sentByStudent"] ? Colors.teal : Colors.white),
+                                SizedBox(
+                                  height: sizedBoxHeight / 5,
+                                ),
+                              ],
+                            ),
+                          )),
+                    ),
                   );
                 }).toList(),
               ),
@@ -104,10 +109,7 @@ class _DiscussionWithMentorState extends State<DiscussionWithMentor> {
 
       DocumentReference studentDocuments = studentCollection.doc();
 
-      studentDocuments.set(studentDocRef).whenComplete(() => {
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Submitted here Successfully"))),
-          });
+      studentDocuments.set(studentDocRef);
     }
 
     print("${widget.studentName}");
@@ -117,39 +119,43 @@ class _DiscussionWithMentorState extends State<DiscussionWithMentor> {
         title: Text("${widget.studentName}"),
       ),
       body: gettingFirebaseData(),
+
       persistentFooterButtons: [
-        Row(
-          children: [
-            SizedBox(
-              width: 10,
-            ),
-            Expanded(
-                flex: 3,
-                child: TextFormField(
-                  controller: message,
-                  decoration: InputDecoration(
-                    hintText: "Type here",
-                  ),
-                  validator: (value) {
-                    if (!value!.isNotEmpty) {
-                      return "Enter your First Name";
-                    } else {
-                      return null;
-                    }
-                  },
-                )),
-            SizedBox(
-              width: 10,
-            ),
-            Expanded(
-                flex: 1,
-                child: ElevatedButton(
-                  onPressed: () => updateMentorData(message.text),
-                  child: Icon(Icons.send),
-                  style: ElevatedButton.styleFrom(
-                      shape: CircleBorder(), padding: EdgeInsets.all(15)),
-                ))
-          ],
+        Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                  flex: 3,
+                  child: TextFormField(
+                    controller: message,
+                    decoration: InputDecoration(
+                      hintText: "Type here",
+                    ),
+                    validator: (value) {
+                      if (!value!.isNotEmpty) {
+                        return "Enter your First Name";
+                      } else {
+                        return null;
+                      }
+                    },
+                  )),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
+                    onPressed: () => updateMentorData(message.text),
+                    child: Icon(Icons.send),
+                    style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(), padding: EdgeInsets.all(15)),
+                  ))
+            ],
+          ),
         )
       ],
     );

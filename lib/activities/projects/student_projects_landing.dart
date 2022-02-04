@@ -1,14 +1,11 @@
 import 'package:christ_university/activities/projects/discuss_with_mentor.dart';
-import 'package:christ_university/activities/projects/student_projects_registration.dart';
 import 'package:christ_university/utils/important_variables.dart';
 import 'package:christ_university/utils/resuable_widgets.dart';
-import 'package:christ_university/utils/routes.dart';
 import 'package:christ_university/utils/shared_prefs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class ProjectsModuleStudent extends StatefulWidget {
   final String AcademicProjectsTitle;
@@ -52,10 +49,10 @@ class _ProjectsModuleStudentState extends State<ProjectsModuleStudent> {
     preferencesShared.setSaveAString(
         "${widget.AcademicProjectsTitle}RegState", "Unregistered");
 
-    bool? mentorNameIsPresent = preferencesShared
+    /*bool? mentorNameIsPresent = preferencesShared
             .getSavedBooleanState("${widget.AcademicProjectsTitle}") ??
         false;
-
+*/
     print(_count);
 
     return Scaffold(
@@ -101,18 +98,39 @@ class _ProjectsModuleStudentState extends State<ProjectsModuleStudent> {
                           return document[
                               '${widget.AcademicProjectsTitle}MentorName'];
                         }).toList();
+
+                        var mailID = snapshot.data!.docs
+                            .map((DocumentSnapshot document) {
+                          return document[
+                          '${widget.AcademicProjectsTitle}MentorEmailID'];
+                        }).toList();
+
                         if (name.isEmpty) {
                           return gettingFirebaseListData();
                         } else {
                           print("is present");
                           highTitle = "Mentor Name";
-                          return ReUsableWidgets().textOutput(
+                          return Column(
+                            children: [
+                              ReUsableWidgets().textOutput(
                               "${name[0]}",
                               Alignment.centerLeft,
                               TextAlign.left,
                               25,
                               true,
-                              Colors.black);
+                              Colors.black),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                  child: OutlinedButton(onPressed: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                        DiscussionWithMentor(
+                                            studentName: FirebaseAuth.instance.currentUser!.email as String,
+                                            facultyName: mailID[0],
+                                            projectType: widget.AcademicProjectsTitle)
+                                    ));
+                                  }, child: Text("Discuss with mentor")))
+                            ],
+                          );
                         }
                       }
                     }),
@@ -140,8 +158,8 @@ class _ProjectsModuleStudentState extends State<ProjectsModuleStudent> {
         ));
   }
 
+  var mentorNamesList;
   Widget gettingFirebaseListData() {
-    var mentorNamesList;
 
     return StreamBuilder<QuerySnapshot>(
       stream: db.collection(ImportantVariables.facultyDatabase).snapshots(),

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:christ_university/activities/club_activities/clubs.dart';
-import 'package:christ_university/activities/projects/facutys_mentee_project_list.dart';
 import 'package:christ_university/activities/projects/student_list_for_faculty.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -238,4 +237,50 @@ class FirebaseApi {
       return null;
     }
   }
+}
+
+class Learning{
+  /*Widget team() =>StreamBuilder<QuerySnapshot>(
+  stream: db
+      .collection(widget.AcademicProjectsTitle)
+      .where("menteeName", isEqualTo: user!.email)
+      .snapshots(),
+  builder: (context, snapshot) {
+  if (snapshot.hasError || !(snapshot.hasData)) {
+  return gettingFirebaseListData();
+  } else {
+  var name = snapshot.data!.docs
+      .map((DocumentSnapshot document) {
+  return document[
+  '${widget.AcademicProjectsTitle}MentorName'];
+  }).toList();
+  if (name.isEmpty) {
+  return gettingFirebaseListData();
+  } else {
+  print("is present");
+  highTitle = "Mentor Name";
+  return Column(
+  children: [
+  ReUsableWidgets().textOutput(
+  "${name[0]}",
+  Alignment.centerLeft,
+  TextAlign.left,
+  25,
+  true,
+  Colors.black),
+  Align(
+  alignment: Alignment.centerRight,
+  child: OutlinedButton(onPressed: () {
+  Navigator.push(context, MaterialPageRoute(builder: (context)=>
+  DiscussionWithMentor(
+  studentName: FirebaseAuth.instance.currentUser!.email as String,
+  facultyName: name[1],
+  projectType: widget.AcademicProjectsTitle)
+  ));
+  }, child: Text("Discuss with mentor")))
+  ],
+  );
+  }
+  }
+  });*/
 }
