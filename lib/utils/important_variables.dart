@@ -8,6 +8,7 @@ class ImportantVariables{
   /*Firebase db Collections and documents*/
   static String studentsDatabase = "studentsDatabase";
   static String facultyDatabase = "facultyDatabase";
+  static String facultyWorkExDatabase = "facultyWorkExDatabase";
 
   /*Freshers DB*/
   static String freshersTempDB = "freshersTempDB";
@@ -27,8 +28,13 @@ class ImportantVariables{
   /*Shared Preferences*/
   static String loggedInStateSharPref = "loggedInState";
   static String didStudentLoginSharPref = "didStudentLogin";
-  
+
+  static String userSalutationSharPref = "userSalutationSharPref";
   static String userFirstNameSharPref = "userFirstName";
+  static String userSecondNameSharPref = "userSecondNameSharPref";
+  static String userSpecializationSharPref = "userSpecializationSharPref";
+  static String appHasUserDataSharPref = "appHasUserDataSharPref";
+
   static String facultyEmployeeIDSharPref = "facultyEmployeeIDSharPref";
   static String studentRollNumberSharPref = "studentRollNumberSharPref";
 

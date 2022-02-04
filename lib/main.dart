@@ -6,13 +6,12 @@ import 'package:christ_university/activities/facultymodules/faculty_data_collect
 import 'package:christ_university/activities/facultymodules/faculty_landing_with_bottom_nav.dart';
 import 'package:christ_university/activities/facultymodules/facultyregistration/personal_details.dart';
 import 'package:christ_university/activities/facultymodules/facultyregistration/publication_details.dart';
+import 'package:christ_university/activities/facultymodules/facultyregistration/work_exp_list.dart';
 import 'package:christ_university/activities/facultymodules/facultyregistration/work_exprience_details.dart';
 import 'package:christ_university/activities/studentmodules/student_landing_bottom_nav.dart';
 import 'package:christ_university/login/faculty_login.dart';
 import 'package:christ_university/login/splash_screen.dart';
-import 'package:christ_university/activities/studentmodules/student_home.dart';
 import 'package:christ_university/activities/studentmodules/student_data_collection_home.dart';
-import 'package:christ_university/testing_ui.dart';
 import 'package:christ_university/utils/important_variables.dart';
 import 'package:christ_university/utils/shared_prefs.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -35,20 +34,20 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  Firebase.initializeApp().catchError((e){
+  await Firebase.initializeApp().catchError((e){
     print(e);
   });
 
   await preferencesShared.init();
-  bool loginState = false, didStudentLogin = false, fresherLogin;
+  /*bool loginState = false, didStudentLogin = false, fresherLogin;*/
   String whereAmI;
 
-  loginState = await preferencesShared.getSavedBooleanState(ImportantVariables.loggedInStateSharPref) ?? false;
+  /*loginState = await preferencesShared.getSavedBooleanState(ImportantVariables.loggedInStateSharPref) ?? false;
   didStudentLogin = await preferencesShared.getSavedBooleanState(ImportantVariables.didStudentLoginSharPref) ?? false;
 
   fresherLogin = await preferencesShared
       .getSavedBooleanState(ImportantVariables.tempStudentDetailsLogInStatus) ?? false;
-
+*/
   whereAmI = await preferencesShared
       .getSavedString(ImportantVariables.whereAmI) ?? MyRoutes.splash;
 
@@ -102,7 +101,11 @@ Future<void> main() async {
       MyRoutes.facultyDataCollection : (context) => FacultyDataCollection(),
       MyRoutes.facultyAcademicData : (context) => FacultyAcademicDetails(),
       MyRoutes.facultyPersonalData : (context) => FacultyPersonalDetails(),
-      MyRoutes.facultyWorkExData : (context) => FacultyWorkExprienceDetails(),
+
+      //MyRoutes.facultyWorkExFirebaseList : (context) => FacultyWorkExFireList(),
+      //MyRoutes.facultyWorkExAdd : (context) => FacultyWorkExprienceDetails(),
+
+
       MyRoutes.facultyPublicationData : (context) => FacultyPublicationData(),
 
       MyRoutes.activityReporting : (context) => ActivityReporting(),

@@ -1,6 +1,11 @@
+import 'package:christ_university/utils/important_variables.dart';
 import 'package:christ_university/utils/routes.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
+import 'facultyregistration/work_exp_list.dart';
 
 class FacultyDataCollection extends StatefulWidget {
   const FacultyDataCollection({Key? key}) : super(key: key);
@@ -13,7 +18,17 @@ class _FacultyDataCollectionState extends State<FacultyDataCollection> {
 
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Firebase.initializeApp();
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+    Firebase.initializeApp();
 
     User? user = FirebaseAuth.instance.currentUser;
     String url = user!.photoURL as String;
@@ -57,107 +72,106 @@ class _FacultyDataCollectionState extends State<FacultyDataCollection> {
                 ),
               ),
               SizedBox(height: 20,),
-              Card(
-                child: InkWell(
-                  onTap: (){
-                    Navigator.pushNamed(context,MyRoutes.facultyPersonalData);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      children: [
-                        Expanded(
+              OutlinedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context,MyRoutes.facultyPersonalData);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Icon(Icons.portrait_rounded, color: Colors.black,),
+                      ),
+                      Expanded(
+                        flex: 8,
+                        child: Text("Personal Details", style: TextStyle(color: Colors.black)),
+                      ),
+                      Expanded(
                           flex: 2,
-                          child: Icon(Icons.portrait_rounded),
-                        ),
-                        Expanded(
-                          flex: 8,
-                          child: Text("Personal Details"),
-                        ),
-                        Expanded(
-                            flex: 2,
-                            child: Icon(Icons.arrow_right_outlined)
-                        ),
-                      ],
-                    ),
+                          child: Icon(Icons.arrow_right_outlined)
+                      ),
+                    ],
                   ),
                 ),
               ),
-              Card(
-                child: InkWell(
-                  onTap: (){
-                    Navigator.pushNamed(context,MyRoutes.facultyAcademicData);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      children: [
-                        Expanded(
+              SizedBox(height: 10,),
+              OutlinedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context,MyRoutes.facultyAcademicData);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Icon(Icons.menu_book_sharp, color: Colors.black,),
+                      ),
+                      Expanded(
+                        flex: 8,
+                        child: Text("Education Details", style: TextStyle(color: Colors.black),),
+                      ),
+                      Expanded(
                           flex: 2,
-                          child: Icon(Icons.menu_book_sharp),
-                        ),
-                        Expanded(
-                          flex: 8,
-                          child: Text("Education Details"),
-                        ),
-                        Expanded(
-                            flex: 2,
-                            child: Icon(Icons.arrow_right_outlined)
-                        ),
-                      ],
-                    ),
+                          child: Icon(Icons.arrow_right_outlined)
+                      ),
+                    ],
                   ),
                 ),
               ),
-              Card(
-                child: InkWell(
-                  onTap: (){
-                    Navigator.pushNamed(context,MyRoutes.facultyWorkExData);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      children: [
-                        Expanded(
+              SizedBox(height: 10,),
+              OutlinedButton(
+                onPressed: (){
+                  Navigator.push(context,MaterialPageRoute(builder: (context) =>
+                  FacultyWorkExFireList(
+                    dbName: ImportantVariables.facultyWorkExDatabase,
+
+                  )));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Icon(Icons.build, color: Colors.black,),
+                      ),
+                      Expanded(
+                        flex: 8,
+                        child: Text("Work Experience", style: TextStyle(color: Colors.black)),
+                      ),
+                      Expanded(
                           flex: 2,
-                          child: Icon(Icons.build),
-                        ),
-                        Expanded(
-                          flex: 8,
-                          child: Text("Work Experience"),
-                        ),
-                        Expanded(
-                            flex: 2,
-                            child: Icon(Icons.arrow_right_outlined)
-                        ),
-                      ],
-                    ),
+                          child: Icon(Icons.arrow_right_outlined)
+                      ),
+                    ],
                   ),
                 ),
               ),
-              Card(
-                child: InkWell(
-                  onTap: (){
-                    Navigator.pushNamed(context,MyRoutes.facultyPublicationData);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      children: [
-                        Expanded(
+              SizedBox(height: 10,),
+              OutlinedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context,MyRoutes.facultyPublicationData);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Icon(Icons.book_outlined, color: Colors.black,),
+                      ),
+                      Expanded(
+                        flex: 8,
+                        child: Text("Publication Details", style: TextStyle(color: Colors.black)),
+                      ),
+                      Expanded(
                           flex: 2,
-                          child: Icon(Icons.book_outlined),
-                        ),
-                        Expanded(
-                          flex: 8,
-                          child: Text("Publication Details"),
-                        ),
-                        Expanded(
-                            flex: 2,
-                            child: Icon(Icons.arrow_right_outlined)
-                        ),
-                      ],
-                    ),
+                          child: Icon(Icons.arrow_right_outlined)
+                      ),
+                    ],
                   ),
                 ),
               ),

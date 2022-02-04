@@ -22,48 +22,40 @@ class _StudentListState extends State<StudentList> {
         .where("${widget.AcademicProjectsTitle}MentorEmailID", isEqualTo: FirebaseAuth.instance.currentUser!.email).snapshots(),
     builder: (context, snapshot) {
       if(!snapshot.hasData){
-        return Center(child: CircularProgressIndicator());
+        return Center(child: Text("No mentees yet"));
       }else{
         return Container(
           child: ListView(
             children: snapshot.data!.docs.map((documents) {
               return Container(
                 width: MediaQuery.of(context).size.width * 0.65,
-                child : GestureDetector(
-                  onTap: () {
+                child : OutlinedButton(
+                  onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>
                         DiscussionWithMentor(studentName: documents["menteeName"],
                             facultyName: FirebaseAuth.instance.currentUser!.email as String,
                             projectType: widget.AcademicProjectsTitle)
                     ));
                   },
-                  child: Container(
-                    color: Colors.black38,
-                    height: 100,
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: ReUsableWidgets().textOutput(
-                                  documents["menteeName"],
-                                  Alignment.centerLeft,
-                                  TextAlign.left,
-                                  18,
-                                  false,
-                                  Colors.black),
-                            ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Icon(
-                                Icons.arrow_forward_ios
-                              ),
-                            ),
-                          ],
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: ReUsableWidgets().textOutput(
+                            documents["menteeName"],
+                            Alignment.centerLeft,
+                            TextAlign.left,
+                            16,
+                            false,
+                            Colors.black),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Icon(
+                            Icons.arrow_forward_ios
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               );

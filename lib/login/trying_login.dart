@@ -19,7 +19,8 @@ FirebaseFirestore db = FirebaseFirestore.instance;
 var dataBaseSearch;
 
 class _TryingLoginState extends State<TryingLogin> {
-  Widget gettingFirebaseData(String userEmail,String database) => StreamBuilder<QuerySnapshot>(
+  Widget gettingFirebaseData(String userEmail, String database, BuildContext context) =>
+      StreamBuilder<QuerySnapshot>(
         stream: db
             .collection(database)
             .where("userEmail", isEqualTo: userEmail)
@@ -55,18 +56,19 @@ class _TryingLoginState extends State<TryingLogin> {
 
   @override
   Widget build(BuildContext context) {
-
     User? user = FirebaseAuth.instance.currentUser;
     String? userEmail = user!.email;
 
-    if(userEmail!.contains("mba.christuniversity.in")){
+    if (userEmail!.contains("mba.christuniversity.in") ||
+        userEmail.contains("aravindgoping@gmail.com")) {
       dataBaseSearch = ImportantVariables.facultyDatabase;
-    }else if (userEmail.contains("christuniversity.in")){
+    } else if (userEmail.contains("christuniversity.in")) {
       dataBaseSearch = ImportantVariables.studentsDatabase;
     }
 
     return Scaffold(
-      body: gettingFirebaseData(userEmail,dataBaseSearch),
+      body: gettingFirebaseData(userEmail, dataBaseSearch, context),
     );
   }
+
 }

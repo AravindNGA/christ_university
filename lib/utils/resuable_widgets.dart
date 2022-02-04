@@ -54,34 +54,39 @@ class ReUsableWidgets {
         ),
       );
 
-  Widget CardView(IconData icon, String title, BuildContext context) => Card(
+  Widget CardView(IconData icon, String title, BuildContext context) => OutlinedButton(
+    onPressed: () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  StudentList(AcademicProjectsTitle: title)));
+    },
         child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: Row(
             children: [
               Expanded(
                 flex: 2,
-                child: Icon(Icons.ac_unit),
+                child: Icon(icon,
+                color: Colors.teal,),
               ),
               Expanded(
                 flex: 8,
-                child: Text(title),
+                child: Text(title,
+                style: TextStyle(
+                  color: Colors.black
+                ),),
               ),
               Expanded(
                   flex: 2,
                   child: IconButton(
                     icon: Icon(Icons.arrow_right_outlined),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  StudentList(AcademicProjectsTitle: title)));
-                    },
+                    onPressed: () {},
                   )),
             ],
           ),
-        ),
+        )
       );
 
   SnacksBar(BuildContext context, String content) {

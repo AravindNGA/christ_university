@@ -426,83 +426,7 @@ class _StudentLoginState extends State<StudentLogin> {
 
   var applicationNumberLogin = TextEditingController();
 
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Center(child: Text('Log in with Application number')),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                TextFormField(
-                  controller: applicationNumberLogin,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: "Enter your Application Number",
-                    labelText: "Application Number",
-                  ),
-                  validator: (value) {
-                    if (!value!.isNotEmpty) {
-                      return "Application Number missing";
-                    } else {
-                      applicationNumber = value;
-                      return null;
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Login'),
-              onPressed: () {
-                if (!applicationNumberLogin.text.isEmpty) {
-                  print(applicationNumberLogin.text);
-
-                  FirebaseFirestore.instance
-                      .collection(ImportantVariables.freshersTempDB)
-                      .where("FresherApplicationNumber",
-                          isEqualTo: applicationNumberLogin.text)
-                      .get()
-                      .then((document) => {
-                            print(document),
-                            setState(() {
-                              preferencesShared.setSaveAString(
-                                  ImportantVariables
-                                      .tempStudentDetailsApplicationNumber,
-                                  applicationNumberLogin.text);
-                              preferencesShared.setSaveBooleanState(
-                                  ImportantVariables
-                                      .tempStudentDetailsLogInStatus,
-                                  true);
-                              preferencesShared.setSaveBooleanState(
-                                  ImportantVariables.loggedInStateSharPref,
-                                  true);
-                            }),
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                MyRoutes.FresherLanding,
-                                (Route<dynamic> route) => false)
-                          });
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _showUserAlreadyLoggedIn() async {
+  /*Future<void> _showUserAlreadyLoggedIn() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -541,11 +465,9 @@ class _StudentLoginState extends State<StudentLogin> {
         );
       },
     );
-  }
+  }*/
 
   Future<UserCredential> _signInWithGoogleTrying() async {
-    bool userLoggedInBefore = false;
-    // Trigger the authentication flow
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
     // Obtain the auth details from the request

@@ -26,7 +26,9 @@ class MyRoutes{
   static String facultyDataCollection = "/facultyDataCollection";
   static String facultyAcademicData = "/facultyAcademicData";
   static String facultyPersonalData = "/facultyPersonalData";
-  static String facultyWorkExData = "/facultyWorkExData";
+  static String facultyWorkExFirebaseList = "/facultyWorkExFirebaseList";
+  static String facultyWorkExAdd = "/facultyWorkExAdd";
+
   static String facultyPublicationData = "/facultyPublicationData";
 
   static String activityReporting = "/activityReporting";

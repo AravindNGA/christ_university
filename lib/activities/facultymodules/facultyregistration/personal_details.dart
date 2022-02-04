@@ -2,6 +2,7 @@ import 'package:christ_university/utils/important_variables.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:christ_university/utils/shared_prefs.dart';
 
 class FacultyPersonalDetails extends StatefulWidget {
 
@@ -40,9 +41,9 @@ var userName, userEmail;
 CollectionReference studentCollection = FirebaseFirestore.instance
     .collection(ImportantVariables.studentsDatabase);
 
-var bloodGroup, phoneNumber, 
-    perAddressLine1, perAddressLine2, perCity, perState, perCountry, nationality,
-    tempAddressLine1, tempAddressLine2, tempCity, tempState, tempCountry;
+var bloodGroup, phoneNumber, AlternativePhoneNumber,
+    perAddressLine1, perAddressLine2, perCity, perState, perCountry, perPinCode, nationality,
+    tempAddressLine1, tempAddressLine2, tempCity, tempState, tempCountry, tempPinCode;
 var fatherName, fatherEmail, fatherPhone, motherName, motherEmail, motherPhone;
 
 var personalDataFilled = false;
@@ -61,12 +62,26 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
       Map<String, dynamic> updateUserData = {
         "bloodGroup": bloodGroup,
         "phoneNumber": phoneNumber,
+        "AlternativePhoneNumber": AlternativePhoneNumber,
+        "tempAddressLine1":tempAddressLine1,
+        "tempAddressLine2":tempAddressLine2,
+        "tempCity":tempCity,
+        "tempState":tempState,
+        "tempCountry":tempCountry,
+        "tempPinCode":tempPinCode,
         "addressLine1": perAddressLine1,
         "addressLine2": perAddressLine2,
         "city": perCity,
         "state": perState,
         "country": perCountry,
+        "perPinCode":perPinCode,
         "nationality": nationality,
+        "fatherName": fatherName,
+        "fatherEmail": fatherEmail,
+        "fatherPhone": fatherPhone,
+        "motherName": motherName,
+        "motherEmail": motherEmail,
+        "motherPhone": motherPhone,
         "personalDataFilled" : personalDataFilled
       };
 
@@ -141,7 +156,28 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
                     }
                   },
                 ),
+                SizedBox(height: sizedBoxHeight/2,),
                 TextFormField(
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: "Enter Alternative Mobile Number",
+                    labelText: "Alternative Mobile Number",
+                  ),
+                  validator: (value) {
+                    if (!value!.isNotEmpty) {
+                      return "Enter Alternative Mobile Number";
+                    } else if (value.length != 10){
+                      return "Enter Valid Mobile number without country code";
+                    }else{
+                      AlternativePhoneNumber = int.parse(value);
+                      return null;
+                    }
+                  },
+                ),
+                SizedBox(height: sizedBoxHeight/2,),
+                TextFormField(
+                  initialValue: "Value",
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: "Enter Nationality",
@@ -177,6 +213,7 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
                     }
                   },
                 ),
+                SizedBox(height: sizedBoxHeight/2,),
                 TextFormField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -192,6 +229,7 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
                     }
                   },
                 ),
+                SizedBox(height: sizedBoxHeight/2,),
                 TextFormField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -207,8 +245,10 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
                     }
                   },
                 ),
+                SizedBox(height: sizedBoxHeight/2,),
                 TextFormField(
                   decoration: InputDecoration(
+                    border: OutlineInputBorder(),
                     hintText: "Enter State",
                     labelText: "State",
                   ),
@@ -221,14 +261,48 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
                     }
                   },
                 ),
-                SizedBox(height : sizedBoxHeight),
+                SizedBox(height : sizedBoxHeight/2),
+                TextFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: "Enter Country",
+                    labelText: "Country",
+                  ),
+                  validator: (value) {
+                    if (!value!.isNotEmpty) {
+                      return "Enter Country";
+                    } else {
+                      tempCountry = value;
+                      return null;
+                    }
+                  },
+                ),
+                SizedBox(height : sizedBoxHeight/2),
+                TextFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: "Enter Pincode",
+                    labelText: "Pincode",
+                  ),
+                  validator: (value) {
+                    if (!value!.isNotEmpty) {
+                      return "Enter Pincode";
+                    } else {
+                      tempPinCode = value;
+                      return null;
+                    }
+                  },
+                ),
+                SizedBox(height : sizedBoxHeight/2),
                 Align(
                     alignment: Alignment.centerLeft,
                     child: Text("Permanent Address",
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold))),
+                SizedBox(height : sizedBoxHeight/2),
                 TextFormField(
                   decoration: InputDecoration(
+                    border: OutlineInputBorder(),
                     hintText: "Enter Address Line 1",
                     labelText: "Address Line 1",
                   ),
@@ -241,8 +315,10 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
                     }
                   },
                 ),
+                SizedBox(height : sizedBoxHeight/2),
                 TextFormField(
                   decoration: InputDecoration(
+                    border: OutlineInputBorder(),
                     hintText: "Enter Address Line 2",
                     labelText: "Address Line 2",
                   ),
@@ -255,8 +331,10 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
                     }
                   },
                 ),
+                SizedBox(height : sizedBoxHeight/2),
                 TextFormField(
                   decoration: InputDecoration(
+                    border: OutlineInputBorder(),
                     hintText: "Enter City",
                     labelText: "City",
                   ),
@@ -269,8 +347,10 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
                     }
                   },
                 ),
+                SizedBox(height : sizedBoxHeight/2),
                 TextFormField(
                   decoration: InputDecoration(
+                    border: OutlineInputBorder(),
                     hintText: "Enter State",
                     labelText: "State",
                   ),
@@ -283,14 +363,48 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
                     }
                   },
                 ),
-                SizedBox(height: 2 * sizedBoxHeight),
-                /*Align(
+                SizedBox(height : sizedBoxHeight/2),
+                TextFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: "Enter Country",
+                    labelText: "Country",
+                  ),
+                  validator: (value) {
+                    if (!value!.isNotEmpty) {
+                      return "Enter Country";
+                    } else {
+                      perState = value;
+                      return null;
+                    }
+                  },
+                ),
+                SizedBox(height : sizedBoxHeight/2),
+                TextFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: "Enter Pincode",
+                    labelText: "Pincode",
+                  ),
+                  validator: (value) {
+                    if (!value!.isNotEmpty) {
+                      return "Enter Pincode";
+                    } else {
+                      perPinCode = value;
+                      return null;
+                    }
+                  },
+                ),
+                SizedBox(height : sizedBoxHeight/2),
+                Align(
                     alignment: Alignment.centerLeft,
                     child: Text("Fathers's Details",
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold))),
+                SizedBox(height : sizedBoxHeight/2),
                 TextFormField(
                   decoration: InputDecoration(
+                    border: OutlineInputBorder(),
                     hintText: "Enter Father's Name",
                     labelText: "Father's Name",
                   ),
@@ -303,9 +417,11 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
                     }
                   },
                 ),
+                SizedBox(height : sizedBoxHeight/2),
                 TextFormField(
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
+                    border: OutlineInputBorder(),
                     hintText: "Enter Father's Phone Number",
                     labelText: "Father's Phone Number",
                   ),
@@ -320,8 +436,10 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
                     }
                   },
                 ),
+                SizedBox(height : sizedBoxHeight/2),
                 TextFormField(
                   decoration: InputDecoration(
+                    border: OutlineInputBorder(),
                     hintText: "Enter Father's Email",
                     labelText: "Father's Email",
                   ),
@@ -334,14 +452,16 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
                     }
                   },
                 ),
-                SizedBox(height: 2 * sizedBoxHeight),
+                SizedBox(height : sizedBoxHeight/2),
                 Align(
                     alignment: Alignment.centerLeft,
                     child: Text("Mother's Details",
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold))),
+                SizedBox(height : sizedBoxHeight/2),
                 TextFormField(
                   decoration: InputDecoration(
+                    border: OutlineInputBorder(),
                     hintText: "Enter Mothers's Name",
                     labelText: "Mothers's Name",
                   ),
@@ -354,9 +474,11 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
                     }
                   },
                 ),
+                SizedBox(height : sizedBoxHeight/2),
                 TextFormField(
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
+                    border: OutlineInputBorder(),
                     hintText: "Enter Mother's Phone Number",
                     labelText: "Mother's Phone Number",
                   ),
@@ -371,21 +493,15 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
                     }
                   },
                 ),
+                SizedBox(height : sizedBoxHeight/2),
                 TextFormField(
                   decoration: InputDecoration(
+                    border: OutlineInputBorder(),
                     hintText: "Enter Mother's Email",
                     labelText: "Mother's Email",
                   ),
-                  validator: (value) {
-                    if (!value!.isNotEmpty) {
-                      return "Enter Mother's Email";
-                    }else{
-                      motherEmail = value;
-                      return null;
-                    }
-                  },
-                ),*/
-                SizedBox(height: 3 * sizedBoxHeight),
+                ),
+                SizedBox(height: sizedBoxHeight),
                 Align(
                   alignment: Alignment.centerRight,
                   child: Material(
@@ -411,5 +527,28 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
         ),
       ),
     );
+  }
+
+  gettingUserName(String userEmail) {
+
+    FirebaseFirestore.instance
+        .collection(ImportantVariables.facultyDatabase)
+        .doc(userEmail)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        /*userSal = documentSnapshot["salutation"];
+        userFirstNameFromDB = documentSnapshot["firstName"];
+        userSecondName = documentSnapshot["lastName"];
+        userSpecialization = documentSnapshot["spec"];*/
+        setState(() {
+
+        });
+
+        print('Document data: ${documentSnapshot["firstName"]}');
+      } else {
+        print('Document does not exist on the database');
+      }
+    });
   }
 }

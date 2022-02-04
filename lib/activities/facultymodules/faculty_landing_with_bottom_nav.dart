@@ -32,6 +32,8 @@ class _FacultyLandingActivityState extends State<FacultyLandingActivity> {
     Firebase.initializeApp();
 
     preferencesShared.setSaveAString(ImportantVariables.whereAmI, MyRoutes.facultyLanding);
+
+    Navigator.of(context).popUntil(ModalRoute.withName(MyRoutes.facultyLanding));
   }
 
   @override
@@ -67,4 +69,5 @@ class _FacultyLandingActivityState extends State<FacultyLandingActivity> {
       ),
     );
   }
+
 }
