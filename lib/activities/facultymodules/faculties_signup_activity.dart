@@ -165,6 +165,8 @@ class _FacultySignUpActivityState extends State<FacultySignUpActivity> {
         "department" : department,
         "spec": spec,
         "campus" : campusSel,
+        "personalData" : [],
+        "educationalDetails":[],
         "hierarchy" : "choose"
       };
 
@@ -552,7 +554,7 @@ class _FacultySignUpActivityState extends State<FacultySignUpActivity> {
     );
   }
 
-  Widget thigsn() => SingleChildScrollView(
+  /*Widget thigsn() => SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.fromLTRB(32, 50, 32, 10),
           child: Form(
@@ -682,7 +684,7 @@ class _FacultySignUpActivityState extends State<FacultySignUpActivity> {
             ),
           ),
         ),
-      );
+      );*/
 
   onSubmit(){
     print(campusSel);

@@ -36,17 +36,64 @@ var bloodGroupDropDown = [
 /*Upload Items*/
 
 var userName, userEmail;
-
-
-/*var bloodGroup, phoneNumber, AlternativePhoneNumber,
-    perAddressLine1, perAddressLine2, perCity, perState, perCountry, perPinCode, nationality,
-    tempAddressLine1, tempAddressLine2, tempCity, tempState, tempCountry, tempPinCode, fatherName, fatherEmail, fatherPhone, motherName, motherEmail, motherPhone;*/
+var userPersonalData = [];
 
 var personalDataFilled = false;
 
+List headings = [
+  "bloodGroup",
+      "phoneNumber",
+      "AlternativePhoneNumber",
+      "perAddressLine1",
+      "perAddressLine2",
+      "perCity",
+      "perState",
+      "perCountry",
+      "perPinCode",
+      "nationality",
+      "tempAddressLine1",
+      "tempAddressLine2",
+      "tempCity",
+      "tempState",
+      "tempCountry",
+      "tempPinCode",
+      "fatherName",
+      "fatherEmail",
+      "fatherPhone",
+      "motherName",
+      "motherEmail",
+      "motherPhone"
+];
+
+List personalDetails = [
+  "bloodGroup",
+  "phoneNumber",
+  "AlternativePhoneNumber",
+  "perAddressLine1",
+  "perAddressLine2",
+  "perCity",
+  "perState",
+  "perCountry",
+  "perPinCode",
+  "nationality",
+  "tempAddressLine1",
+  "tempAddressLine2",
+  "tempCity",
+  "tempState",
+  "tempCountry",
+  "tempPinCode",
+  "fatherName",
+  "fatherEmail",
+  "fatherPhone",
+  "motherName",
+  "motherEmail",
+  "motherPhone",
+  true
+];
+
 
 var bloodGroup;
-final phoneNumber = TextEditingController();
+/*final phoneNumber = TextEditingController();
 final AlternativePhoneNumber = TextEditingController();
 final perAddressLine1 = TextEditingController();
 final perAddressLine2 = TextEditingController();
@@ -66,7 +113,7 @@ final fatherEmail = TextEditingController();
 final fatherPhone = TextEditingController();
 final motherName = TextEditingController();
 final motherEmail = TextEditingController();
-final motherPhone = TextEditingController();
+final motherPhone = TextEditingController();*/
 
 final db = FirebaseFirestore.instance;
 
@@ -79,14 +126,246 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
     final User? user = FirebaseAuth.instance.currentUser;
     userEmail = user!.email;
 
-    gettingUserName(userEmail);
+    //gettingUserName(userEmail);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: OutlinedButton(onPressed: () => isFormFilled(), child: Text("Save", style: TextStyle(fontSize: 16,color: Colors.white),)),
+          )
+        ],
       ),
-      body: Scaffold(
-        body: SingleChildScrollView(
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+        child: StreamBuilder<QuerySnapshot>(
+          stream: db.collection(ImportantVariables.facultyDatabase)
+              .where("userEmail", isEqualTo: userEmail)
+              .snapshots(),
+          builder: (context, snapshot) {
+
+            if(!snapshot.hasData || snapshot.hasError){
+             /* return Form(
+                key: _fromKey,
+                child: ListView.builder(
+                  itemCount: headings.length,
+                  itemBuilder: (BuildContext cnt, int index){
+                    return ListTile(
+                      title: Column(
+                        children: [
+                          TextFormField(
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: "Enter ${headings[index]}",
+                              labelText: "${headings[index]}",
+                            ),
+                            validator: (value) {
+                              if (!value!.isNotEmpty) {
+                                return "Enter ${headings[index]}";
+                              } else{
+                                //userPersonalData.insert(index, value);
+                                //userPersonalData[index] = value;
+                                return null;
+                              }
+                            },
+                          ),
+                          SizedBox(height: sizedBoxHeight/2,),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              );*/
+
+              return Center(child: CircularProgressIndicator());
+            }
+
+            else{
+              var personalDetails = snapshot.data!.docs.map((documents) {
+                return documents['personalData'];
+              }).toList();
+
+              print("personalDetails ${personalDetails.length}");
+
+              if(personalDetails.length == 1){
+                return Form(
+                  key: _fromKey,
+                  child: ListView.builder(
+                    itemCount: headings.length,
+                    itemBuilder: (BuildContext cnt, int index){
+                      return ListTile(
+                        title: Column(
+                          children: [
+                            (index==0)? Row(
+                              children: [
+                                Expanded(flex: 2, child: Text("Blood Group")),
+                                SizedBox(width: sizedBoxHeight),
+                                Expanded(
+                                  flex: 4,
+                                  child: Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: DropdownButton(
+                                      icon: Icon(Icons.keyboard_arrow_down_rounded),
+                                      value: "Choose Blood Group",
+                                      items: bloodGroupDropDown.map((String? item) {
+                                        return DropdownMenuItem(
+                                            value: item, child: Text(item!));
+                                      }).toList(),
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          if (value != "Choose Blood Group") {
+                                            passDownBloodGroup = true;
+                                            headings[index]= value;
+                                            //userPersonalData.add(value);
+                                          }
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ) :TextFormField(
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: "Enter ${headings[index]}",
+                                labelText: "${headings[index]}",
+                              ),
+                              validator: (value) {
+                                if (!value!.isNotEmpty) {
+                                  return "Enter ${headings[index]}";
+                                } else{
+                                  headings[index]= value;
+                                  //userPersonalData.insert(index, value);
+                                  //userPersonalData.add(value);
+                                  return null;
+                                }
+                              },
+                            ),
+                            SizedBox(height: sizedBoxHeight/2,),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
+              } else{
+                return Form(
+                  key: _fromKey,
+                  child: ListView.builder(
+                    itemCount: headings.length,
+                    itemBuilder: (BuildContext cnt, int index){
+                      return ListTile(
+                        title: Column(
+                          children: [
+                            (index==0)? Row(
+                              children: [
+                                Expanded(flex: 2, child: Text("Blood Group")),
+                                SizedBox(width: sizedBoxHeight),
+                                Expanded(
+                                  flex: 4,
+                                  child: Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: DropdownButton(
+                                      icon: Icon(Icons.keyboard_arrow_down_rounded),
+                                      value: personalDetails[0][index].toString(),
+                                      items: bloodGroupDropDown.map((String? item) {
+                                        return DropdownMenuItem(
+                                            value: item, child: Text(item!));
+                                      }).toList(),
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          if (value != "Choose") {
+                                            passDownBloodGroup = true;
+                                            personalDetails[index]= value;
+                                            //userPersonalData.insert(index, value);
+                                            //userPersonalData.add(value);
+                                          }
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ) :TextFormField(
+                              initialValue: personalDetails[0][index].toString(),
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: "Enter ${headings[index]}",
+                                labelText: "${headings[index]}",
+                              ),
+                              validator: (value) {
+                                if (!value!.isNotEmpty) {
+                                  return "Enter ${headings[index]}";
+                                } else{
+                                  personalDetails[index]= value;
+                                  //userPersonalData.insert(index, value);
+                                  //userPersonalData.add(value);
+                                  return null;
+                                }
+                              },
+                            ),
+                            SizedBox(height: sizedBoxHeight/2,),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+            }
+          },
+        ),
+      )
+    );
+  }
+
+  /*gettingUserName(String userEmail) {
+
+    FirebaseFirestore.instance
+        .collection(ImportantVariables.facultyDatabase)
+        .doc(userEmail)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+
+        if(documentSnapshot['personalDataFilled']){
+
+          setState(() {
+             phoneNumber.text = int.parse(documentSnapshot['phoneNumber']) as String;
+             AlternativePhoneNumber.text = documentSnapshot['AlternativePhoneNumber'];
+             perAddressLine1.text = "documentSnapshot['perAddressLine1']";
+             perAddressLine2.text = documentSnapshot['perAddressLine2'];
+             perCity.text = documentSnapshot['perCity'];
+             perState.text = documentSnapshot['perState'];
+             perCountry.text = documentSnapshot['perCountry'];
+             perPinCode.text = documentSnapshot['perPinCode'];
+             nationality.text = documentSnapshot['nationality'];
+             tempAddressLine1.text = documentSnapshot['tempAddressLine1'];
+             tempAddressLine2.text = documentSnapshot['tempAddressLine2'];
+             tempCity.text = documentSnapshot['tempCity'];
+             tempState.text = documentSnapshot['tempState'];
+             tempCountry.text = documentSnapshot['tempCountry'];
+             tempPinCode.text = documentSnapshot['tempPinCode'];
+             fatherName.text = documentSnapshot['fatherName'];
+             fatherEmail.text = documentSnapshot['fatherEmail'];
+             fatherPhone.text = documentSnapshot['fatherPhone'];
+             motherName.text = documentSnapshot['motherName'];
+             motherEmail.text = documentSnapshot['motherEmail'];
+             motherPhone.text = documentSnapshot['motherPhone'];
+          });
+        }
+
+        print('Document data: ${documentSnapshot["firstName"]}');
+      } else {
+        print('Document does not exist on the database');
+      }
+    });
+  }*/
+
+  /*
+  * SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.all(18),
             child: Form(
@@ -519,63 +798,44 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
             ),
           ),
         )
-      ),
-    );
-  }
-
-  gettingUserName(String userEmail) {
-
-    FirebaseFirestore.instance
-        .collection(ImportantVariables.facultyDatabase)
-        .doc(userEmail)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-
-        if(documentSnapshot['personalDataFilled']){
-
-          setState(() {
-             phoneNumber.text = int.parse(documentSnapshot['phoneNumber']) as String;
-             AlternativePhoneNumber.text = documentSnapshot['AlternativePhoneNumber'];
-             perAddressLine1.text = "documentSnapshot['perAddressLine1']";
-             perAddressLine2.text = documentSnapshot['perAddressLine2'];
-             perCity.text = documentSnapshot['perCity'];
-             perState.text = documentSnapshot['perState'];
-             perCountry.text = documentSnapshot['perCountry'];
-             perPinCode.text = documentSnapshot['perPinCode'];
-             nationality.text = documentSnapshot['nationality'];
-             tempAddressLine1.text = documentSnapshot['tempAddressLine1'];
-             tempAddressLine2.text = documentSnapshot['tempAddressLine2'];
-             tempCity.text = documentSnapshot['tempCity'];
-             tempState.text = documentSnapshot['tempState'];
-             tempCountry.text = documentSnapshot['tempCountry'];
-             tempPinCode.text = documentSnapshot['tempPinCode'];
-             fatherName.text = documentSnapshot['fatherName'];
-             fatherEmail.text = documentSnapshot['fatherEmail'];
-             fatherPhone.text = documentSnapshot['fatherPhone'];
-             motherName.text = documentSnapshot['motherName'];
-             motherEmail.text = documentSnapshot['motherEmail'];
-             motherPhone.text = documentSnapshot['motherPhone'];
-          });
-        }
-
-        print('Document data: ${documentSnapshot["firstName"]}');
-      } else {
-        print('Document does not exist on the database');
-      }
-    });
-  }
+  * */
 
   isFormFilled() {
-    if (_fromKey.currentState!.validate() && passDownBloodGroup) {
+    if (_fromKey.currentState!.validate()) {
       //Navigator.pushNamed(context, MyRoutes.studentLanding);
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Submitted Successfully")));
 
       personalDataFilled = true;
 
-      Map<String, dynamic> updateUserData = {
-        "phoneNumber": phoneNumber.text,
+      /*List personalDetails = [
+        bloodGroup,
+        int.parse(phoneNumber.text),
+        int.parse(AlternativePhoneNumber.text),
+        perAddressLine1.text,
+        perAddressLine2.text,
+        perCity.text,
+        perState.text,
+        perCountry.text,
+        int.parse(perPinCode.text),
+        nationality.text,
+        tempAddressLine1.text,
+        tempAddressLine2.text,
+        tempCity.text,
+        tempState.text,
+        tempCountry.text,
+        int.parse(tempPinCode.text),
+        fatherName.text,
+        fatherEmail.text,
+        int.parse(fatherPhone.text),
+        motherName.text,
+        motherEmail.text,
+        int.parse(motherPhone.text),
+        personalDataFilled
+      ];*/
+
+      /*Map<String, dynamic> updateUserData = {
+        "phoneNumber": int.parse(phoneNumber.text),
         "AlternativePhoneNumber": AlternativePhoneNumber.text,
         "tempAddressLine1":tempAddressLine1.text,
         "tempAddressLine2":tempAddressLine2.text,
@@ -597,11 +857,15 @@ class _FacultyPersonalDetailsState extends State<FacultyPersonalDetails> {
         "motherEmail": motherEmail.text,
         "motherPhone": motherPhone.text,
         "personalDataFilled" : personalDataFilled
+      };*/
+
+      Map<String, dynamic> updateUserData = {
+        'personalData' : personalDetails
       };
 
-      DocumentReference facultyDocs = FirebaseFirestore.instance
+          DocumentReference facultyDocs = FirebaseFirestore.instance
           .collection(ImportantVariables.facultyDatabase).doc(userEmail);
-      facultyDocs.set(updateUserData).whenComplete(() {
+      facultyDocs.update(updateUserData).whenComplete(() {
         print('Submitted');
         Navigator.pop(context);
       });

@@ -6,8 +6,6 @@ import 'package:christ_university/activities/facultymodules/faculty_data_collect
 import 'package:christ_university/activities/facultymodules/faculty_landing_with_bottom_nav.dart';
 import 'package:christ_university/activities/facultymodules/facultyregistration/personal_details.dart';
 import 'package:christ_university/activities/facultymodules/facultyregistration/publication_details.dart';
-import 'package:christ_university/activities/facultymodules/facultyregistration/work_exp_list.dart';
-import 'package:christ_university/activities/facultymodules/facultyregistration/work_exprience_details.dart';
 import 'package:christ_university/activities/studentmodules/student_landing_bottom_nav.dart';
 import 'package:christ_university/login/faculty_login.dart';
 import 'package:christ_university/login/splash_screen.dart';
